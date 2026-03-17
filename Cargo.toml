@@ -1,0 +1,107 @@
+[package]
+name = "llm-provider"
+version = "0.32.0"
+edition = "2024"
+license = "MIT"
+readme = "README.md"
+description = "A unified LLM completion API, trimmed from rig-core."
+repository = "https://github.com/YageGeng/llm-provider.git"
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[dependencies]
+tokio = { version = "1", features = ["rt", "sync"] }
+as-any = { version = "0.3.2" }
+async-stream = { version = "0.3.6" }
+base64 = { version = "0.22.1" }
+bytes = { version = "1.11.1" }
+futures = { version = "0.3.32" }
+glob = { version = "0.3.3" }
+mime_guess = { version = "2" }
+ordered-float = { version = "5.1.0" }
+reqwest = { version = "0.13.2", features = ["json", "stream", "multipart"] }
+schemars = { version = "1.2.1" }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = { version = "1.0.149" }
+thiserror = { version = "2.0.18" }
+tracing = { version = "0.1.44" }
+url = { version = "2.5.8" }
+rmcp = { version = "1", optional = true, features = ["client"] }
+http = "1"
+tracing-futures = { version = "0.2.5", features = ["futures-03"] }
+fastrand = "2.3.0"
+nanoid = { version = "0.4.0" }
+getrandom = { version = "0.4", optional = true }
+eventsource-stream = "0.2.3"
+pin-project-lite = "0.2"
+futures-timer = "3.0.3"
+wasm-bindgen-futures = { version = "0.4", optional = true }
+mime = "0.3.17"
+reqwest-middleware = { version = "0.5.1", optional = true, features = [
+    "json",
+    "multipart",
+    "charset",
+    "http2",
+] }
+
+# Native-only dependency for OpenAI Responses websocket mode.
+# Keeping it target-scoped avoids pulling a tokio socket transport into wasm builds.
+[target.'cfg(not(target_family = "wasm"))'.dependencies]
+tokio-tungstenite = { version = "0.28", features = ["rustls-tls-webpki-roots"] }
+
+[dev-dependencies]
+anyhow = { version = "1" }
+tokio = { version = "1", features = ["full"] }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tokio-test = { version = "0.4" }
+serde_path_to_error = { version = "0.1" }
+base64 = { version = "0.22" }
+reqwest-retry = { version = "0.9" }
+reqwest-middleware = { version = "0.5", features = [
+    "json",
+    "multipart",
+    "charset",
+    "http2",
+] }
+
+# Required for `rmcp` example
+hyper-util = { version = "0.1", features = ["service", "server"] }
+rmcp = { version = "1.2", features = [
+    "client",
+    "macros",
+    "reqwest",                                  # required for some strange reason
+    "transport-streamable-http-client",
+    "transport-streamable-http-client-reqwest",
+    "transport-streamable-http-server-session",
+    "transport-streamable-http-server",
+    "transport-worker",
+] }
+axum = "0.8"
+
+# required for otel
+opentelemetry = "=0.30.0"
+opentelemetry_sdk = { version = "=0.30.0", features = ["rt-tokio"] }
+opentelemetry-otlp = "=0.30.0"
+tracing-opentelemetry = "=0.31.0"
+
+
+[features]
+default = ["reqwest-rustls"]
+wasm = [
+    "dep:wasm-bindgen-futures",
+    "futures-timer/wasm-bindgen",
+    "getrandom/wasm_js",
+]
+rmcp = ["dep:rmcp"]
+socks = ["reqwest/socks"]
+reqwest-native-tls = ["reqwest/native-tls"]
+reqwest-rustls = [
+    "reqwest/rustls",
+    "reqwest/charset",
+    "reqwest/http2",
+    "reqwest/system-proxy",
+]
+reqwest-middleware = ["dep:reqwest-middleware"]
+reqwest-middleware-rustls = ["reqwest-middleware", "reqwest-middleware/rustls"]
