@@ -1,5 +1,96 @@
-/target
-*.log
+# ===== Rust =====
+/target/
+**/*.rs.bk
+Cargo.lock
+
+# ===== macOS =====
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+
+# ===== IDE - General =====
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# ===== IDE - IntelliJ =====
+*.iml
+*.iws
+*.ipr
+.idea/
+out/
+
+# ===== IDE - VS Code =====
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# ===== Environment =====
 .env
-.claude
+.env.local
+.env.*.local
+*.env
+
+# ===== Logs =====
+*.log
+logs/
+
+# ===== Testing =====
+coverage/
+lcov.info
+*.gcda
+*.gcno
+*.gcov
+
+# ===== Build artifacts =====
+build/
+dist/
+out/
+bin/
+pkg/
+
+# ===== Dependencies =====
+node_modules/
+vendor/
+
+# ===== Documentation build =====
+docs/_build/
+docs/site/
+
+# ===== OS generated =====
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ===== Backup files =====
+*.bak
+*.backup
+*.tmp
+*.temp
+*~
+.*.sw?
+
+# ===== Rust specific =====
+# Ignore Cargo.lock for libraries (keep for binaries)
+# /Cargo.lock
+# Ignore the target directory
+/target/
+
+# ===== Claude/AI tools =====
+.claude/
+.opencode/
+
+# ===== Misc =====
 CHANGELOG.md
