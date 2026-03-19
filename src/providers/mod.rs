@@ -4,10 +4,11 @@
 //! All providers share the unified [CompletionModel](crate::completion::CompletionModel) trait.
 //!
 //! # Example
-//! ```
-//! use rig::{providers::openai, agent::AgentBuilder};
+//! ```no_run
+//! use llm_provider::{agent::AgentBuilder, prelude::CompletionClient, providers::openai};
 //!
-//! let openai = openai::Client::new("your-openai-api-key");
+//! let openai = openai::Client::new("your-openai-api-key")
+//!     .expect("Failed to create OpenAI client");
 //!
 //! let gpt_4o = openai.completion_model("gpt-4o");
 //!

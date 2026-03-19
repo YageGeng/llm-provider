@@ -385,7 +385,7 @@ where
                 }
 
                 let chat_stream_span = info_span!(
-                    target: "rig::agent_chat",
+                    target: "llm_provider::agent_chat",
                     parent: tracing::Span::current(),
                     "chat_streaming",
                     gen_ai.operation.name = "chat",
@@ -427,7 +427,7 @@ where
 
                 let mut tool_calls = vec![];
                 let mut tool_results = vec![];
-                let mut accumulated_reasoning: Vec<rig::message::Reasoning> = vec![];
+                let mut accumulated_reasoning: Vec<llm_provider::message::Reasoning> = vec![];
                 // Kept separate from accumulated_reasoning so providers requiring
                 // signatures (e.g. Anthropic) never see unsigned blocks.
                 let mut pending_reasoning_delta_text = String::new();
@@ -541,8 +541,8 @@ where
                         Ok(StreamedAssistantContent::ToolCallDelta { id, internal_call_id, content }) => {
                             if let Some(ref hook) = self.hook {
                                 let (name, delta) = match &content {
-                                    rig::streaming::ToolCallDeltaContent::Name(n) => (Some(n.as_str()), ""),
-                                    rig::streaming::ToolCallDeltaContent::Delta(d) => (None, d.as_str()),
+                                    llm_provider::streaming::ToolCallDeltaContent::Name(n) => (Some(n.as_str()), ""),
+                                    llm_provider::streaming::ToolCallDeltaContent::Delta(d) => (None, d.as_str()),
                                 };
 
                                 if let HookAction::Terminate { reason } = hook.on_tool_call_delta(&id, &internal_call_id, name, delta)
@@ -604,11 +604,11 @@ where
                 // Add reasoning and tool calls to chat history.
                 // OpenAI Responses API requires reasoning items to precede function_call items.
                 if !tool_calls.is_empty() || !accumulated_reasoning.is_empty() {
-                    let mut content_items: Vec<rig::message::AssistantContent> = vec![];
+                    let mut content_items: Vec<llm_provider::message::AssistantContent> = vec![];
 
                     // Reasoning must come before tool calls (OpenAI requirement)
                     for reasoning in accumulated_reasoning.drain(..) {
-                        content_items.push(rig::message::AssistantContent::Reasoning(reasoning));
+                        content_items.push(llm_provider::message::AssistantContent::Reasoning(reasoning));
                     }
 
                     content_items.extend(tool_calls.clone());

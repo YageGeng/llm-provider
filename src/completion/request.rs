@@ -24,21 +24,25 @@
 //! responses, and errors.
 //!
 //! Example Usage:
-//! ```rust
-//! use rig::providers::openai::{Client, self};
-//! use rig::completion::*;
+//! ```rust,no_run
+//! use llm_provider::providers::openai::{Client, self};
+//! use llm_provider::completion::*;
+//! use llm_provider::prelude::CompletionClient;
 //!
+//! # #[tokio::main]
+//! # async fn main() {
 //! // Initialize the OpenAI client and a completion model
-//! let openai = Client::new("your-openai-api-key");
+//! let openai = Client::new("your-openai-api-key").expect("Failed to create OpenAI client");
 //!
 //! let gpt_4 = openai.completion_model(openai::GPT_4);
 //!
 //! // Create the completion request
-//! let request = gpt_4.completion_request("Who are you?")
+//! let request = gpt_4
+//!     .completion_request("Who are you?")
 //!     .preamble("\
 //!         You are Marvin, an extremely smart but depressed robot who is \
 //!         nonetheless helpful towards humanity.\
-//!     ")
+//!     ".to_string())
 //!     .temperature(0.5)
 //!     .build();
 //!
@@ -48,16 +52,8 @@
 //!     .expect("Failed to get completion response");
 //!
 //! // Handle the completion response
-//! match completion_response.choice {
-//!     ModelChoice::Message(message) => {
-//!         // Handle the completion response as a message
-//!         println!("Received message: {}", message);
-//!     }
-//!     ModelChoice::ToolCall(tool_name, tool_params) => {
-//!         // Handle the completion response as a tool call
-//!         println!("Received tool call: {} {:?}", tool_name, tool_params);
-//!     }
-//! }
+//! println!("Received choice: {:?}", response.choice);
+//! # }
 //! ```
 //!
 //! For more information on how to use the completion functionality, refer to the documentation of
@@ -282,7 +278,7 @@ pub trait Chat: WasmCompatSend + WasmCompatSync {
 ///
 /// # Example
 /// ```rust,ignore
-/// use rig::prelude::*;
+/// use llm_provider::prelude::*;
 /// use schemars::JsonSchema;
 /// use serde::Deserialize;
 ///
@@ -615,17 +611,21 @@ fn merge_provider_tools_into_additional_params(
 /// Builder struct for constructing a completion request.
 ///
 /// Example usage:
-/// ```rust
-/// use rig::{
+/// ```rust,no_run
+/// use llm_provider::{
+///     completion::CompletionModel,
 ///     providers::openai::{Client, self},
 ///     completion::CompletionRequestBuilder,
+///     prelude::CompletionClient,
 /// };
 ///
-/// let openai = Client::new("your-openai-api-key");
-/// let model = openai.completion_model(openai::GPT_4O).build();
+/// # #[tokio::main]
+/// # async fn main() {
+/// let openai = Client::new("your-openai-api-key").expect("Failed to create OpenAI client");
+/// let model = openai.completion_model(openai::GPT_4O);
 ///
 /// // Create the completion request and execute it separately
-/// let request = CompletionRequestBuilder::new(model, "Who are you?".to_string())
+/// let request = CompletionRequestBuilder::new(model.clone(), "Who are you?".to_string())
 ///     .preamble("You are Marvin from the Hitchhiker's Guide to the Galaxy.".to_string())
 ///     .temperature(0.5)
 ///     .build();
@@ -633,17 +633,21 @@ fn merge_provider_tools_into_additional_params(
 /// let response = model.completion(request)
 ///     .await
 ///     .expect("Failed to get completion response");
+/// # }
 /// ```
 ///
 /// Alternatively, you can execute the completion request directly from the builder:
-/// ```rust
-/// use rig::{
-///     providers::openai::{Client, self},
+/// ```rust,no_run
+/// use llm_provider::{
 ///     completion::CompletionRequestBuilder,
+///     providers::openai::{Client, self},
+///     prelude::CompletionClient,
 /// };
 ///
-/// let openai = Client::new("your-openai-api-key");
-/// let model = openai.completion_model(openai::GPT_4O).build();
+/// # #[tokio::main]
+/// # async fn main() {
+/// let openai = Client::new("your-openai-api-key").expect("Failed to create OpenAI client");
+/// let model = openai.completion_model(openai::GPT_4O);
 ///
 /// // Create the completion request and execute it directly
 /// let response = CompletionRequestBuilder::new(model, "Who are you?".to_string())
@@ -652,6 +656,7 @@ fn merge_provider_tools_into_additional_params(
 ///     .send()
 ///     .await
 ///     .expect("Failed to get completion response");
+/// # }
 /// ```
 ///
 /// Note: It is usually unnecessary to create a completion request builder directly.

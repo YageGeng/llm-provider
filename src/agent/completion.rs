@@ -70,13 +70,19 @@ pub(crate) async fn build_completion_request<M: CompletionModel>(
 /// prompt requests unless overridden via `.with_hook()` on the request.
 ///
 /// # Example
-/// ```
-/// use rig::{completion::Prompt, providers::openai};
+/// ```rust,no_run
+/// use llm_provider::{
+///     agent::AgentBuilder,
+///     completion::Prompt,
+///     prelude::{CompletionClient, ProviderClient},
+///     providers::openai,
+/// };
 ///
+/// # #[tokio::main]
+/// # async fn main() {
 /// let openai = openai::Client::from_env();
 ///
-/// let comedian_agent = openai
-///     .agent("gpt-4o")
+/// let comedian_agent = AgentBuilder::new(openai.completion_model("gpt-4o"))
 ///     .preamble("You are a comedian here to entertain the user using humour and jokes.")
 ///     .temperature(0.9)
 ///     .build();
@@ -84,6 +90,7 @@ pub(crate) async fn build_completion_request<M: CompletionModel>(
 /// let response = comedian_agent.prompt("Entertain me!")
 ///     .await
 ///     .expect("Failed to prompt the agent");
+/// # }
 /// ```
 #[derive(Clone)]
 #[non_exhaustive]
@@ -285,7 +292,7 @@ where
     ///
     /// # Example
     /// ```rust,ignore
-    /// use rig::prelude::*;
+    /// use llm_provider::prelude::*;
     /// use schemars::JsonSchema;
     /// use serde::Deserialize;
     ///

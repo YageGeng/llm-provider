@@ -33,7 +33,7 @@ where
 
         if tracing::enabled!(tracing::Level::TRACE) {
             tracing::trace!(
-                target: "rig::streaming",
+                target: "llm_provider::streaming",
                 "Huggingface streaming completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );
@@ -56,7 +56,7 @@ where
 
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-            target: "rig::completions",
+            target: "llm_provider::completions",
             "chat",
             gen_ai.operation.name = "chat",
             gen_ai.provider.name = "huggingface",

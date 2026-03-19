@@ -8,8 +8,8 @@
 //! # Example
 //!
 //! ```rust,ignore
-//! use rig::tool::rmcp::McpClientHandler;
-//! use rig::tool::server::ToolServer;
+//! use llm_provider::tool::rmcp::McpClientHandler;
+//! use llm_provider::tool::server::ToolServer;
 //! use rmcp::ServiceExt;
 //!
 //! // 1. Create a ToolServer and get a handle

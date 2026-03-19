@@ -2,9 +2,10 @@
 //!
 //! # Example
 //! ```
-//! use rig::providers::xai;
+//! use llm_provider::{prelude::CompletionClient, providers::xai};
 //!
-//! let client = xai::Client::new("YOUR_API_KEY");
+//! let client = xai::Client::new("YOUR_API_KEY")
+//!     .expect("Failed to create xAI client");
 //!
 //! let grok = client.completion_model(xai::GROK_3);
 //! ```

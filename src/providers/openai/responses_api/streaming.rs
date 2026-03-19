@@ -246,7 +246,7 @@ where
 
         if enabled!(Level::TRACE) {
             tracing::trace!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "OpenAI Responses streaming completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );
@@ -260,11 +260,9 @@ where
             .body(body)
             .map_err(|e| CompletionError::HttpError(e.into()))?;
 
-        // let request_builder = self.client.post_reqwest("/responses").json(&request);
-
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat_streaming",
                 gen_ai.operation.name = "chat_streaming",
                 gen_ai.provider.name = tracing::field::Empty,

@@ -2,11 +2,15 @@
 //!
 //! # Example
 //! ```
-//! use rig::providers::anthropic;
+//! use llm_provider::{
+//!     prelude::CompletionClient,
+//!     providers::anthropic::{self, completion::CLAUDE_3_5_SONNET},
+//! };
 //!
-//! let client = anthropic::Anthropic::new("YOUR_API_KEY");
+//! let client = anthropic::Client::new("YOUR_API_KEY")
+//!     .expect("Failed to create Anthropic client");
 //!
-//! let sonnet = client.completion_model(anthropic::CLAUDE_3_5_SONNET);
+//! let sonnet = client.completion_model(CLAUDE_3_5_SONNET);
 //! ```
 
 pub mod client;

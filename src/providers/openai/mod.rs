@@ -2,9 +2,10 @@
 //!
 //! # Example
 //! ```
-//! use rig::providers::openai;
+//! use llm_provider::{prelude::CompletionClient, providers::openai};
 //!
-//! let client = openai::Client::new("YOUR_API_KEY");
+//! let client = openai::Client::new("YOUR_API_KEY")
+//!     .expect("Failed to create OpenAI client");
 //!
 //! let gpt4o = client.completion_model(openai::GPT_4O);
 //! ```

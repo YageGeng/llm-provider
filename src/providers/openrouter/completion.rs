@@ -293,7 +293,7 @@ impl MaxPrice {
 /// # Example
 ///
 /// ```rust
-/// use rig::providers::openrouter::{ProviderPreferences, ProviderSortStrategy, Quantization};
+/// use llm_provider::providers::openrouter::{ProviderPreferences, ProviderSortStrategy, Quantization};
 ///
 /// // Create preferences for zero data retention providers, sorted by throughput
 /// let prefs = ProviderPreferences::new()
@@ -378,7 +378,7 @@ impl ProviderPreferences {
     /// # Example
     ///
     /// ```rust
-    /// use rig::providers::openrouter::ProviderPreferences;
+    /// use llm_provider::providers::openrouter::ProviderPreferences;
     ///
     /// let prefs = ProviderPreferences::new()
     ///     .order(["anthropic", "openai"]);
@@ -393,7 +393,7 @@ impl ProviderPreferences {
     /// # Example
     ///
     /// ```rust
-    /// use rig::providers::openrouter::ProviderPreferences;
+    /// use llm_provider::providers::openrouter::ProviderPreferences;
     ///
     /// let prefs = ProviderPreferences::new()
     ///     .only(["azure", "together"])
@@ -409,7 +409,7 @@ impl ProviderPreferences {
     /// # Example
     ///
     /// ```rust
-    /// use rig::providers::openrouter::ProviderPreferences;
+    /// use llm_provider::providers::openrouter::ProviderPreferences;
     ///
     /// let prefs = ProviderPreferences::new()
     ///     .ignore(["deepinfra"]);
@@ -451,7 +451,7 @@ impl ProviderPreferences {
     /// # Example
     ///
     /// ```rust
-    /// use rig::providers::openrouter::ProviderPreferences;
+    /// use llm_provider::providers::openrouter::ProviderPreferences;
     ///
     /// let prefs = ProviderPreferences::new()
     ///     .zdr(true);
@@ -471,7 +471,7 @@ impl ProviderPreferences {
     /// # Example
     ///
     /// ```rust
-    /// use rig::providers::openrouter::{ProviderPreferences, ProviderSortStrategy};
+    /// use llm_provider::providers::openrouter::{ProviderPreferences, ProviderSortStrategy};
     ///
     /// let prefs = ProviderPreferences::new()
     ///     .sort(ProviderSortStrategy::Latency);
@@ -488,7 +488,7 @@ impl ProviderPreferences {
     /// # Example
     ///
     /// ```rust
-    /// use rig::providers::openrouter::{ProviderPreferences, ThroughputThreshold, PercentileThresholds};
+    /// use llm_provider::providers::openrouter::{ProviderPreferences, ThroughputThreshold, PercentileThresholds};
     ///
     /// // Simple threshold
     /// let prefs = ProviderPreferences::new()
@@ -528,7 +528,7 @@ impl ProviderPreferences {
     /// # Example
     ///
     /// ```rust
-    /// use rig::providers::openrouter::{ProviderPreferences, Quantization};
+    /// use llm_provider::providers::openrouter::{ProviderPreferences, Quantization};
     ///
     /// let prefs = ProviderPreferences::new()
     ///     .quantizations([Quantization::Int8, Quantization::Fp16]);
@@ -747,7 +747,7 @@ impl TryFrom<CompletionResponse> for completion::CompletionResponse<CompletionRe
 /// # Example
 ///
 /// ```rust
-/// use rig::providers::openrouter::UserContent;
+/// use llm_provider::providers::openrouter::UserContent;
 ///
 /// // Text content
 /// let text = UserContent::text("Hello, world!");
@@ -759,14 +759,14 @@ impl TryFrom<CompletionResponse> for completion::CompletionResponse<CompletionRe
 /// let pdf = UserContent::file_url("https://example.com/document.pdf", Some("document.pdf".to_string()));
 ///
 /// // Audio from base64
-/// use rig::completion::message::AudioMediaType;
+/// use llm_provider::completion::message::AudioMediaType;
 /// let audio = UserContent::audio_base64("base64data", AudioMediaType::WAV);
 ///
 /// // Video from URL
 /// let video = UserContent::video_url("https://example.com/video.mp4");
 ///
 /// // Video from base64
-/// use rig::completion::message::VideoMediaType;
+/// use llm_provider::completion::message::VideoMediaType;
 /// let video = UserContent::video_base64("base64data", VideoMediaType::MP4);
 /// ```
 #[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
@@ -1710,7 +1710,7 @@ where
 
         if enabled!(Level::TRACE) {
             tracing::trace!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "OpenRouter completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );
@@ -1718,7 +1718,7 @@ where
 
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat",
                 gen_ai.operation.name = "chat",
                 gen_ai.provider.name = "openrouter",
@@ -1763,7 +1763,7 @@ where
                         span.record("gen_ai.response.id", &response.id);
                         span.record("gen_ai.response.model_name", &response.model);
 
-                        tracing::debug!(target: "rig::completions",
+                        tracing::debug!(target: "llm_provider::completions",
                             "OpenRouter response: {response:?}");
                         response.try_into()
                     }

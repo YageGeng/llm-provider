@@ -4,11 +4,14 @@
 //! and `schemars::JsonSchema` traits. Those can be easily derived using the `derive` macro.
 //!
 //! # Example
-//! ```
-//! use rig::providers::openai;
+//! ```rust,no_run
+//! use llm_provider::providers::openai;
 //!
+//! # #[tokio::main]
+//! # async fn main() {
 //! // Initialize the OpenAI client
-//! let openai = openai::Client::new("your-open-ai-api-key");
+//! let openai = openai::Client::new("your-open-ai-api-key")
+//!     .expect("Failed to create OpenAI client");
 //!
 //! // Define the structure of the data you want to extract
 //! #[derive(serde::Deserialize, serde::Serialize, schemars::JsonSchema)]
@@ -26,6 +29,7 @@
 //! let person = extractor.extract("John Doe is a 30 year old doctor.")
 //!     .await
 //!     .expect("Failed to extract data from text");
+//! # }
 //! ```
 
 use std::marker::PhantomData;

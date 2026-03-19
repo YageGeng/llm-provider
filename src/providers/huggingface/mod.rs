@@ -2,10 +2,11 @@
 //!
 //! # Example
 //! ```
-//! use rig::providers::huggingface::{client::self, completion::self}
+//! use llm_provider::{prelude::CompletionClient, providers::huggingface::{self, completion}};
 //!
 //! // Initialize the Huggingface client
-//! let client = client::Client::new("your-huggingface-api-key");
+//! let client = huggingface::Client::new("your-huggingface-api-key")
+//!     .expect("Failed to create Hugging Face client");
 //!
 //! let completion_model = client.completion_model(completion::GEMMA_2);
 //! ```

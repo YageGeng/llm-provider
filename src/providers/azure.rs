@@ -2,13 +2,14 @@
 //!
 //! # Example
 //! ```
-//! use rig::providers::azure;
-//! use rig::client::CompletionClient;
+//! use llm_provider::providers::azure;
+//! use llm_provider::prelude::CompletionClient;
 //!
 //! let client = azure::Client::builder()
 //!     .api_key("test")
 //!     .azure_endpoint("test".to_string()) // add your endpoint here!
-//!     .build()?;
+//!     .build()
+//!     .expect("Failed to build Azure client");
 //!
 //! let gpt4o = client.completion_model(azure::GPT_4O);
 //! ```
@@ -445,7 +446,7 @@ where
     ) -> Result<completion::CompletionResponse<openai::CompletionResponse>, CompletionError> {
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat",
                 gen_ai.operation.name = "chat",
                 gen_ai.provider.name = "azure.openai",
@@ -465,7 +466,7 @@ where
             AzureOpenAICompletionRequest::try_from((self.model.as_ref(), completion_request))?;
 
         if enabled!(Level::TRACE) {
-            tracing::trace!(target: "rig::completions",
+            tracing::trace!(target: "llm_provider::completions",
                 "Azure OpenAI completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );
@@ -494,7 +495,7 @@ where
                         span.record_response_metadata(&response);
                         span.record_token_usage(&response.usage);
                         if enabled!(Level::TRACE) {
-                            tracing::trace!(target: "rig::completions",
+                            tracing::trace!(target: "llm_provider::completions",
                                 "Azure OpenAI completion response: {}",
                                 serde_json::to_string_pretty(&response)?
                             );
@@ -529,7 +530,7 @@ where
         request.additional_params = Some(params);
 
         if enabled!(Level::TRACE) {
-            tracing::trace!(target: "rig::completions",
+            tracing::trace!(target: "llm_provider::completions",
                 "Azure OpenAI completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );
@@ -545,7 +546,7 @@ where
 
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat_streaming",
                 gen_ai.operation.name = "chat_streaming",
                 gen_ai.provider.name = "azure.openai",

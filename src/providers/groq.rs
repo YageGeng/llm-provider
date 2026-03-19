@@ -2,11 +2,12 @@
 //!
 //! # Example
 //! ```
-//! use rig::providers::groq;
+//! use llm_provider::{prelude::CompletionClient, providers::groq};
 //!
-//! let client = groq::Client::new("YOUR_API_KEY");
+//! let client = groq::Client::new("YOUR_API_KEY")
+//!     .expect("Failed to create Groq client");
 //!
-//! let gpt4o = client.completion_model(groq::GPT_4O);
+//! let instant = client.completion_model(groq::LLAMA_3_1_8B_INSTANT);
 //! ```
 use bytes::Bytes;
 use http::Request;
@@ -358,7 +359,7 @@ where
     ) -> Result<completion::CompletionResponse<CompletionResponse>, CompletionError> {
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat",
                 gen_ai.operation.name = "chat",
                 gen_ai.provider.name = "groq",
@@ -379,7 +380,7 @@ where
         let request = GroqCompletionRequest::try_from((self.model.as_ref(), completion_request))?;
 
         if tracing::enabled!(tracing::Level::TRACE) {
-            tracing::trace!(target: "rig::completions",
+            tracing::trace!(target: "llm_provider::completions",
                 "Groq completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );
@@ -420,7 +421,7 @@ where
                         }
 
                         if tracing::enabled!(tracing::Level::TRACE) {
-                            tracing::trace!(target: "rig::completions",
+                            tracing::trace!(target: "llm_provider::completions",
                                 "Groq completion response: {}",
                                 serde_json::to_string_pretty(&response)?
                             );
@@ -449,7 +450,7 @@ where
     > {
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat_streaming",
                 gen_ai.operation.name = "chat_streaming",
                 gen_ai.provider.name = "groq",
@@ -475,7 +476,7 @@ where
         });
 
         if tracing::enabled!(tracing::Level::TRACE) {
-            tracing::trace!(target: "rig::completions",
+            tracing::trace!(target: "llm_provider::completions",
                 "Groq streaming completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );
@@ -671,7 +672,7 @@ where
                 continue;
             };
 
-            tool_calls.push(rig::providers::openai::completion::ToolCall {
+            tool_calls.push(llm_provider::providers::openai::completion::ToolCall {
                 id: id.clone(),
                 r#type: ToolType::Function,
                 function: Function {

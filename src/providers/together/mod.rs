@@ -1,13 +1,7 @@
 //! Together AI API client and Rig integration
 //!
 //! # Example
-//! ```
-//! use rig::providers::together_ai;
-//!
-//! let client = together_ai::Client::new("YOUR_API_KEY");
-//!
-//! let together_embedding_model = client.embedding_model(together_ai::EMBEDDING_V1);
-//! ```
+//! Embedding examples were removed because `llm_provider` no longer includes embedding support.
 
 pub mod client;
 pub mod completion;

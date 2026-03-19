@@ -2,11 +2,12 @@
 //!
 //! # Example
 //! ```
-//! use rig::providers::cohere;
+//! use llm_provider::{prelude::CompletionClient, providers::cohere};
 //!
-//! let client = cohere::Client::new("YOUR_API_KEY");
+//! let client = cohere::Client::new("YOUR_API_KEY")
+//!     .expect("Failed to create Cohere client");
 //!
-//! let command_r = client.completion_model(cohere::COMMAND_R);
+//! let command_r = client.completion_model("command-r");
 //! ```
 
 pub mod client;

@@ -2,11 +2,16 @@
 //!
 //! # Example
 //! ```
-//! use rig::providers::galadriel;
+//! use llm_provider::{prelude::CompletionClient, providers::galadriel};
 //!
-//! let client = galadriel::Client::new("YOUR_API_KEY", None);
+//! let client = galadriel::Client::new("YOUR_API_KEY")
+//!     .expect("Failed to create Galadriel client");
 //! // to use a fine-tuned model
-//! // let client = galadriel::Client::new("YOUR_API_KEY", "FINE_TUNE_API_KEY");
+//! // let client = galadriel::Client::builder()
+//! //     .api_key("YOUR_API_KEY")
+//! //     .fine_tune_api_key("FINE_TUNE_API_KEY")
+//! //     .build()
+//! //     .expect("Failed to create fine-tuned Galadriel client");
 //!
 //! let gpt4o = client.completion_model(galadriel::GPT_4O);
 //! ```
@@ -536,7 +541,7 @@ where
     ) -> Result<completion::CompletionResponse<CompletionResponse>, CompletionError> {
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat",
                 gen_ai.operation.name = "chat",
                 gen_ai.provider.name = "galadriel",
@@ -558,7 +563,7 @@ where
             GaladrielCompletionRequest::try_from((self.model.as_ref(), completion_request))?;
 
         if enabled!(tracing::Level::TRACE) {
-            tracing::trace!(target: "rig::completions",
+            tracing::trace!(target: "llm_provider::completions",
                 "Galadriel completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );
@@ -579,7 +584,7 @@ where
                 let t = http_client::text(response).await?;
 
                 if enabled!(tracing::Level::TRACE) {
-                    tracing::trace!(target: "rig::completions",
+                    tracing::trace!(target: "llm_provider::completions",
                         "Galadriel completion response: {}",
                         serde_json::to_string_pretty(&t)?
                     );
@@ -636,7 +641,7 @@ where
 
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat_streaming",
                 gen_ai.operation.name = "chat_streaming",
                 gen_ai.provider.name = "galadriel",

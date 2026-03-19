@@ -2,9 +2,9 @@
 //!
 //! # Example
 //! ```rust,ignore
-//! use rig::client::{Nothing, CompletionClient};
-//! use rig::completion::Prompt;
-//! use rig::providers::ollama;
+//! use llm_provider::client::{Nothing, CompletionClient};
+//! use llm_provider::completion::Prompt;
+//! use llm_provider::providers::ollama;
 //!
 //! // Create a new Ollama client (defaults to http://localhost:11434)
 //! // In the case of ollama, no API key is necessary, so we use the `Nothing` struct
@@ -378,7 +378,7 @@ where
     ) -> Result<completion::CompletionResponse<Self::Response>, CompletionError> {
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat",
                 gen_ai.operation.name = "chat",
                 gen_ai.provider.name = "ollama",
@@ -398,7 +398,7 @@ where
         let request = OllamaCompletionRequest::try_from((self.model.as_ref(), completion_request))?;
 
         if tracing::enabled!(tracing::Level::TRACE) {
-            tracing::trace!(target: "rig::completions",
+            tracing::trace!(target: "llm_provider::completions",
                 "Ollama completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );
@@ -436,7 +436,7 @@ where
             );
 
             if tracing::enabled!(tracing::Level::TRACE) {
-                tracing::trace!(target: "rig::completions",
+                tracing::trace!(target: "llm_provider::completions",
                     "Ollama completion response: {}",
                     serde_json::to_string_pretty(&response)?
                 );
@@ -458,7 +458,7 @@ where
     {
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat_streaming",
                 gen_ai.operation.name = "chat_streaming",
                 gen_ai.provider.name = "ollama",
@@ -480,7 +480,7 @@ where
         request.stream = true;
 
         if tracing::enabled!(tracing::Level::TRACE) {
-            tracing::trace!(target: "rig::completions",
+            tracing::trace!(target: "llm_provider::completions",
                 "Ollama streaming completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );

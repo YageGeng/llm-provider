@@ -22,8 +22,13 @@
 //! - Minimal boilerplate to integrate LLM capabilities
 //!
 //! # Quick Example
-//! ```
-//! use rig::{completion::Prompt, providers::openai};
+//! ```rust,no_run
+//! use llm_provider::{
+//!     agent::AgentBuilder,
+//!     completion::Prompt,
+//!     prelude::{CompletionClient, ProviderClient},
+//!     providers::openai,
+//! };
 //!
 //! #[tokio::main]
 //! async fn main() {
@@ -31,10 +36,11 @@
 //!     // Requires the OPENAI_API_KEY environment variable to be set
 //!     let openai_client = openai::Client::from_env();
 //!
-//!     let gpt4 = openai_client.model("gpt-4").build();
+//!     let model = openai_client.completion_model("gpt-4o");
+//!     let agent = AgentBuilder::new(model).build();
 //!
 //!     // Prompt the model and print its response
-//!     let response = gpt4
+//!     let response = agent
 //!         .prompt("Who are you?")
 //!         .await
 //!         .expect("Failed to prompt GPT-4");
@@ -87,7 +93,7 @@
 //! > Thanks to [0xPlaygrounds/rig](https://github.com/0xPlaygrounds/rig) for the excellent foundation.
 //!
 
-extern crate self as rig;
+extern crate self as llm_provider;
 
 pub mod agent;
 pub mod client;

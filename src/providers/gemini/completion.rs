@@ -92,7 +92,7 @@ where
         let request_model = resolve_request_model(&self.model, &completion_request);
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "generate_content",
                 gen_ai.operation.name = "generate_content",
                 gen_ai.provider.name = "gcp.gemini",
@@ -112,7 +112,7 @@ where
 
         if enabled!(Level::TRACE) {
             tracing::trace!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "Gemini completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );
@@ -155,7 +155,7 @@ where
 
                 if enabled!(Level::TRACE) {
                     tracing::trace!(
-                        target: "rig::completions",
+                        target: "llm_provider::completions",
                         "Gemini completion response: {}",
                         serde_json::to_string_pretty(&response)?
                     );
@@ -1439,7 +1439,7 @@ pub mod gemini_api_types {
     /// Gemini API Configuration options for model generation and outputs. Not all parameters are
     /// configurable for every model. From [Gemini API Reference](https://ai.google.dev/api/generate-content#generationconfig)
     /// ### Rig Note:
-    /// Can be used to construct a typesafe `additional_params` in rig::[AgentBuilder](crate::agent::AgentBuilder).
+    /// Can be used to construct a typesafe `additional_params` in llm_provider::[AgentBuilder](crate::agent::AgentBuilder).
     #[derive(Debug, Deserialize, Serialize)]
     #[serde(rename_all = "camelCase")]
     pub struct GenerationConfig {

@@ -2,11 +2,12 @@
 //!
 //! # Example
 //! ```
-//! use rig::providers::perplexity;
+//! use llm_provider::{prelude::CompletionClient, providers::perplexity};
 //!
-//! let client = perplexity::Client::new("YOUR_API_KEY");
+//! let client = perplexity::Client::new("YOUR_API_KEY")
+//!     .expect("Failed to create Perplexity client");
 //!
-//! let llama_3_1_sonar_small_online = client.completion_model(perplexity::LLAMA_3_1_SONAR_SMALL_ONLINE);
+//! let sonar = client.completion_model(perplexity::SONAR);
 //! ```
 use crate::client::BearerAuth;
 use crate::completion::CompletionRequest;
@@ -347,7 +348,7 @@ where
     ) -> Result<completion::CompletionResponse<CompletionResponse>, CompletionError> {
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat",
                 gen_ai.operation.name = "chat",
                 gen_ai.provider.name = "perplexity",
@@ -376,7 +377,7 @@ where
             PerplexityCompletionRequest::try_from((self.model.as_ref(), completion_request))?;
 
         if tracing::enabled!(tracing::Level::TRACE) {
-            tracing::trace!(target: "rig::completions",
+            tracing::trace!(target: "llm_provider::completions",
                 "Perplexity completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );
@@ -408,7 +409,7 @@ where
                         span.record("gen_ai.response.id", response.id.to_string());
                         span.record("gen_ai.response.model_name", response.model.to_string());
                         if tracing::enabled!(tracing::Level::TRACE) {
-                            tracing::trace!(target: "rig::responses",
+                            tracing::trace!(target: "llm_provider::responses",
                                 "Perplexity completion response: {}",
                                 serde_json::to_string_pretty(&response)?
                             );
@@ -433,7 +434,7 @@ where
     ) -> Result<StreamingCompletionResponse<Self::StreamingResponse>, CompletionError> {
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat_streaming",
                 gen_ai.operation.name = "chat_streaming",
                 gen_ai.provider.name = "perplexity",
@@ -464,7 +465,7 @@ where
         request.stream = true;
 
         if tracing::enabled!(tracing::Level::TRACE) {
-            tracing::trace!(target: "rig::completions",
+            tracing::trace!(target: "llm_provider::completions",
                 "Perplexity streaming completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );

@@ -2,8 +2,8 @@
 //!
 //! # Example
 //! ```no_run
-//! use rig::providers::moonshot;
-//! use rig::client::CompletionClient;
+//! use llm_provider::providers::moonshot;
+//! use llm_provider::client::CompletionClient;
 //!
 //! let client = moonshot::Client::new("YOUR_API_KEY").expect("Failed to build client");
 //!
@@ -14,7 +14,7 @@
 //! The default base URL is `https://api.moonshot.cn/v1`. For global access,
 //! use `https://api.moonshot.ai/v1`:
 //! ```no_run
-//! use rig::providers::moonshot;
+//! use llm_provider::providers::moonshot;
 //!
 //! let client = moonshot::Client::builder()
 //!     .api_key("YOUR_API_KEY")
@@ -236,7 +236,7 @@ where
     ) -> Result<completion::CompletionResponse<openai::CompletionResponse>, CompletionError> {
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat",
                 gen_ai.operation.name = "chat",
                 gen_ai.provider.name = "moonshot",
@@ -258,7 +258,7 @@ where
             MoonshotCompletionRequest::try_from((self.model.as_ref(), completion_request))?;
 
         if tracing::enabled!(tracing::Level::TRACE) {
-            tracing::trace!(target: "rig::completions",
+            tracing::trace!(target: "llm_provider::completions",
                 "MoonShot completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );
@@ -293,7 +293,7 @@ where
                             );
                         }
                         if tracing::enabled!(tracing::Level::TRACE) {
-                            tracing::trace!(target: "rig::completions",
+                            tracing::trace!(target: "llm_provider::completions",
                                 "MoonShot completion response: {}",
                                 serde_json::to_string_pretty(&response)?
                             );
@@ -318,7 +318,7 @@ where
     ) -> Result<StreamingCompletionResponse<Self::StreamingResponse>, CompletionError> {
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat_streaming",
                 gen_ai.operation.name = "chat_streaming",
                 gen_ai.provider.name = "moonshot",
@@ -345,7 +345,7 @@ where
         request.additional_params = Some(params);
 
         if tracing::enabled!(tracing::Level::TRACE) {
-            tracing::trace!(target: "rig::completions",
+            tracing::trace!(target: "llm_provider::completions",
                 "MoonShot streaming completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );

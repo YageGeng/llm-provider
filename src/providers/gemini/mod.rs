@@ -1,13 +1,7 @@
 //! Google Gemini API client and Rig integration
 //!
 //! # Example
-//! ```
-//! use rig::providers::gemini;
-//!
-//! let client = gemini::Client::new("YOUR_API_KEY");
-//!
-//! let gemini_embedding_model = client.embedding_model(gemini::EMBEDDING_001);
-//! ```
+//! Embedding examples were removed because `llm_provider` no longer includes embedding support.
 
 pub mod client;
 pub mod completion;

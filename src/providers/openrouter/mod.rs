@@ -2,11 +2,12 @@
 //!
 //! # Example
 //! ```
-//! use rig::providers::openrouter;
+//! use llm_provider::{prelude::CompletionClient, providers::openrouter};
 //!
-//! let client = openrouter::Client::new("YOUR_API_KEY");
+//! let client = openrouter::Client::new("YOUR_API_KEY")
+//!     .expect("Failed to create OpenRouter client");
 //!
-//! let llama_3_1_8b = client.completion_model(openrouter::LLAMA_3_1_8B);
+//! let claude = client.completion_model(openrouter::CLAUDE_3_7_SONNET);
 //! ```
 
 pub mod client;

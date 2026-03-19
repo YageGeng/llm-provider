@@ -733,7 +733,7 @@ where
             .unwrap_or_else(|| self.model.clone());
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat",
                 gen_ai.operation.name = "chat",
                 gen_ai.provider.name = "huggingface",
@@ -754,7 +754,7 @@ where
 
         if enabled!(Level::TRACE) {
             tracing::trace!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "Huggingface completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );
@@ -786,7 +786,7 @@ where
                     ApiResponse::Ok(response) => {
                         if enabled!(Level::TRACE) {
                             tracing::trace!(
-                                target: "rig::completions",
+                                target: "llm_provider::completions",
                                 "Huggingface completion response: {}",
                                 serde_json::to_string_pretty(&response)?
                             );

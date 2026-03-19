@@ -6,8 +6,8 @@
 //!
 //! # Example
 //! ```rust,ignore
-//! use rig::providers::llamafile;
-//! use rig::completion::Prompt;
+//! use llm_provider::providers::llamafile;
+//! use llm_provider::completion::Prompt;
 //!
 //! // Create a new Llamafile client (defaults to http://localhost:8080)
 //! let client = llamafile::Client::from_url("http://localhost:8080");
@@ -240,7 +240,7 @@ where
     ) -> Result<completion::CompletionResponse<openai::CompletionResponse>, CompletionError> {
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat",
                 gen_ai.operation.name = "chat",
                 gen_ai.provider.name = "llamafile",
@@ -259,7 +259,7 @@ where
             LlamafileCompletionRequest::try_from((self.model.as_ref(), completion_request))?;
 
         if tracing::enabled!(Level::TRACE) {
-            tracing::trace!(target: "rig::completions",
+            tracing::trace!(target: "llm_provider::completions",
                 "Llamafile completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );
@@ -294,7 +294,7 @@ where
                         }
 
                         if tracing::enabled!(Level::TRACE) {
-                            tracing::trace!(target: "rig::completions",
+                            tracing::trace!(target: "llm_provider::completions",
                                 "Llamafile completion response: {}",
                                 serde_json::to_string_pretty(&response)?
                             );
@@ -323,7 +323,7 @@ where
     > {
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat_streaming",
                 gen_ai.operation.name = "chat_streaming",
                 gen_ai.provider.name = "llamafile",
@@ -348,7 +348,7 @@ where
         request.additional_params = Some(params);
 
         if tracing::enabled!(Level::TRACE) {
-            tracing::trace!(target: "rig::completions",
+            tracing::trace!(target: "llm_provider::completions",
                 "Llamafile streaming completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );

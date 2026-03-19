@@ -53,8 +53,8 @@ pub struct WithBuilderTools {
 /// `ToolServerHandle`, or add tools via the builder API, but not both.
 ///
 /// # Example
-/// ```
-/// use rig::{providers::openai, agent::AgentBuilder};
+/// ```rust,ignore
+/// use llm_provider::{agent::AgentBuilder, providers::openai};
 ///
 /// let openai = openai::Client::from_env();
 ///

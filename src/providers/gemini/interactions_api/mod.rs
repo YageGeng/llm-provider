@@ -122,7 +122,7 @@ where
     ) -> Result<completion::CompletionResponse<Interaction>, CompletionError> {
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "interactions",
                 gen_ai.operation.name = "interactions",
                 gen_ai.provider.name = "gcp.gemini",
@@ -141,7 +141,7 @@ where
 
         if enabled!(Level::TRACE) {
             tracing::trace!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "Gemini interactions completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );
@@ -181,7 +181,7 @@ where
 
                 if enabled!(Level::TRACE) {
                     tracing::trace!(
-                        target: "rig::completions",
+                        target: "llm_provider::completions",
                         "Gemini interactions completion response: {}",
                         serde_json::to_string_pretty(&response)?
                     );

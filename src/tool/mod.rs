@@ -52,7 +52,7 @@ impl fmt::Display for ToolError {
 ///
 /// # Example
 /// ```
-/// use rig::{
+/// use llm_provider::{
 ///     completion::ToolDefinition,
 ///     tool::{ToolSet, Tool},
 /// };

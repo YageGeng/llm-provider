@@ -2,9 +2,10 @@
 //!
 //! # Example
 //! ```
-//! use rig::providers::hyperbolic;
+//! use llm_provider::{prelude::CompletionClient, providers::hyperbolic};
 //!
-//! let client = hyperbolic::Client::new("YOUR_API_KEY");
+//! let client = hyperbolic::Client::new("YOUR_API_KEY")
+//!     .expect("Failed to create Hyperbolic client");
 //!
 //! let llama_3_1_8b = client.completion_model(hyperbolic::LLAMA_3_1_8B);
 //! ```
@@ -347,7 +348,7 @@ where
     ) -> Result<completion::CompletionResponse<CompletionResponse>, CompletionError> {
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat",
                 gen_ai.operation.name = "chat",
                 gen_ai.provider.name = "hyperbolic",
@@ -368,7 +369,7 @@ where
             HyperbolicCompletionRequest::try_from((self.model.as_ref(), completion_request))?;
 
         if tracing::enabled!(tracing::Level::TRACE) {
-            tracing::trace!(target: "rig::completions",
+            tracing::trace!(target: "llm_provider::completions",
                 "Hyperbolic completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );
@@ -392,7 +393,7 @@ where
                 match serde_json::from_slice::<ApiResponse<CompletionResponse>>(&response_body)? {
                     ApiResponse::Ok(response) => {
                         if tracing::enabled!(tracing::Level::TRACE) {
-                            tracing::trace!(target: "rig::completions",
+                            tracing::trace!(target: "llm_provider::completions",
                                 "Hyperbolic completion response: {}",
                                 serde_json::to_string_pretty(&response)?
                             );
@@ -418,7 +419,7 @@ where
     ) -> Result<StreamingCompletionResponse<Self::StreamingResponse>, CompletionError> {
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat_streaming",
                 gen_ai.operation.name = "chat_streaming",
                 gen_ai.provider.name = "hyperbolic",
@@ -446,7 +447,7 @@ where
         request.additional_params = Some(params);
 
         if tracing::enabled!(tracing::Level::TRACE) {
-            tracing::trace!(target: "rig::completions",
+            tracing::trace!(target: "llm_provider::completions",
                 "Hyperbolic streaming completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );

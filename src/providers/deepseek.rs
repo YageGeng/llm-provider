@@ -2,9 +2,10 @@
 //!
 //! # Example
 //! ```
-//! use rig::providers::deepseek;
+//! use llm_provider::{prelude::CompletionClient, providers::deepseek};
 //!
-//! let client = deepseek::Client::new("DEEPSEEK_API_KEY");
+//! let client = deepseek::Client::new("DEEPSEEK_API_KEY")
+//!     .expect("Failed to create DeepSeek client");
 //!
 //! let deepseek_chat = client.completion_model(deepseek::DEEPSEEK_CHAT);
 //! ```
@@ -541,7 +542,7 @@ where
     > {
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat",
                 gen_ai.operation.name = "chat",
                 gen_ai.provider.name = "deepseek",
@@ -563,7 +564,7 @@ where
             DeepseekCompletionRequest::try_from((self.model.as_ref(), completion_request))?;
 
         if enabled!(Level::TRACE) {
-            tracing::trace!(target: "rig::completions",
+            tracing::trace!(target: "llm_provider::completions",
                 "DeepSeek completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );
@@ -600,7 +601,7 @@ where
                                 .unwrap_or(0),
                         );
                         if enabled!(Level::TRACE) {
-                            tracing::trace!(target: "rig::completions",
+                            tracing::trace!(target: "llm_provider::completions",
                                 "DeepSeek completion response: {}",
                                 serde_json::to_string_pretty(&response)?
                             );
@@ -638,7 +639,7 @@ where
         request.additional_params = Some(params);
 
         if enabled!(Level::TRACE) {
-            tracing::trace!(target: "rig::completions",
+            tracing::trace!(target: "llm_provider::completions",
                 "DeepSeek streaming completion request: {}",
                 serde_json::to_string_pretty(&request)?
             );
@@ -654,7 +655,7 @@ where
 
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat_streaming",
                 gen_ai.operation.name = "chat_streaming",
                 gen_ai.provider.name = "deepseek",

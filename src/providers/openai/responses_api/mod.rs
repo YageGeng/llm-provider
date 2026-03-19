@@ -4,7 +4,10 @@
 //!
 //! If you'd like to switch back to the regular Completions API, you can do so by using the `.completions_api()` function - see below for an example:
 //! ```rust
-//! let openai_client = rig::providers::openai::Client::from_env();
+//! use llm_provider::prelude::CompletionClient;
+//!
+//! let openai_client = llm_provider::providers::openai::Client::new("YOUR_API_KEY")
+//!     .expect("Failed to create OpenAI client");
 //! let model = openai_client.completion_model("gpt-4o").completions_api();
 //! ```
 use super::InputAudio;
@@ -1297,7 +1300,7 @@ where
     ) -> Result<completion::CompletionResponse<Self::Response>, CompletionError> {
         let span = if tracing::Span::current().is_disabled() {
             info_span!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "chat",
                 gen_ai.operation.name = "chat",
                 gen_ai.provider.name = tracing::field::Empty,
@@ -1321,7 +1324,7 @@ where
 
         if enabled!(Level::TRACE) {
             tracing::trace!(
-                target: "rig::completions",
+                target: "llm_provider::completions",
                 "OpenAI Responses completion request: {request}",
                 request = serde_json::to_string_pretty(&request)?
             );
@@ -1356,7 +1359,7 @@ where
                 }
                 if enabled!(Level::TRACE) {
                     tracing::trace!(
-                        target: "rig::completions",
+                        target: "llm_provider::completions",
                         "OpenAI Responses completion response: {response}",
                         response = serde_json::to_string_pretty(&response)?
                     );

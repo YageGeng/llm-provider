@@ -10,13 +10,13 @@ pub trait CompletionClient {
     ///
     /// # Example with OpenAI
     /// ```
-    /// use rig::prelude::*;
-    /// use rig::providers::openai::{Client, self};
+    /// use llm_provider::prelude::*;
+    /// use llm_provider::providers::openai::{Client, self};
     ///
     /// // Initialize the OpenAI client
-    /// let openai = Client::new("your-open-ai-api-key");
+    /// let openai = Client::new("your-open-ai-api-key").expect("Failed to create OpenAI client");
     ///
-    /// let gpt4 = openai.completion_model(openai::GPT4);
+    /// let gpt4 = openai.completion_model(openai::GPT_4);
     /// ```
     fn completion_model(&self, model: impl Into<String>) -> Self::CompletionModel {
         Self::CompletionModel::make(self, model)
